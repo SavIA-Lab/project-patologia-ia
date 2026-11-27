@@ -1,0 +1,29 @@
+name: Corrección de traducción / Translation correction
+description: El texto en inglés es un borrador pendiente de revisión / The English text is a draft pending review
+title: "[Traducción] "
+labels: ["translation"]
+body:
+  - type: input
+    id: ubicacion
+    attributes:
+      label: Dónde aparece / Where it appears
+      placeholder: "Etapa 4, panel lateral / Stage 4, side panel"
+    validations:
+      required: true
+  - type: input
+    id: clave
+    attributes:
+      label: Clave en en.json, si la conoces / Key in en.json, if known
+      placeholder: "s4.note.base"
+  - type: textarea
+    id: actual
+    attributes:
+      label: Texto actual / Current text
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Texto propuesto y motivo / Proposed text and reason
+    validations:
+      required: true
