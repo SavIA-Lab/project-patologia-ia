@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patología Digital &amp; IA — Laboratorio Interactivo 3D · Digital Pathology &amp; AI — Interactive 3D Lab</title>
+<meta name="description" content="Curso interactivo y abierto sobre IA en patología y citología digital (datos sintéticos, con fines docentes). Open interactive course on AI in digital pathology and cytology (synthetic data, for teaching).">
+<meta name="author" content="Andrés Felipe Cardona-Mendoza">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+<!-- Open Graph bilingüe: el título y la descripción llevan ES y EN; el idioma de la interfaz se elige en la página -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PatologIA 3D">
+<meta property="og:title" content="Patología Digital &amp; IA — Laboratorio Interactivo 3D · Digital Pathology &amp; AI — Interactive 3D Lab">
+<meta property="og:description" content="Curso interactivo y abierto sobre IA en patología y citología digital, en español e inglés. Open interactive course on AI in digital pathology and cytology, in Spanish and English.">
+<meta property="og:url" content="https://savia-lab.github.io/project-patologia-ia/">
+<meta property="og:image" content="https://savia-lab.github.io/project-patologia-ia/og.png">
+<meta property="og:image:alt" content="PatologIA 3D · Patología Digital &amp; IA / Digital Pathology &amp; AI">
+<meta property="og:locale" content="es_LA">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div id="draft-label" class="draft-label" role="status" hidden><b data-i18n="draft.label"></b><span lang="es" data-i18n="draft.labelEs"></span></div>
+    <div class="top-row">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1 data-i18n="app.title"></h1>
+          <p class="mono"><span id="release"></span> · <span data-i18n="app.pipeline"></span></p>
+        </div>
+      </div>
+      <div class="seg" id="modality-seg" role="group" data-i18n-aria="top.modalityAria">
+        <button type="button" data-set="modality" data-value="he" data-i18n="modality.he.short" data-i18n-title="modality.he.fullName"></button>
+        <button type="button" data-set="modality" data-value="pap" data-i18n="modality.pap.short" data-i18n-title="modality.pap.fullName"></button>
+        <button type="button" data-set="modality" data-value="ihc" data-i18n="modality.ihc.short" data-i18n-title="modality.ihc.fullName"></button>
+      </div>
+      <div class="top-actions">
+        <div class="seg lang-seg" id="lang-seg" role="group" data-i18n-aria="top.langAria">
+          <button type="button" data-lang="es" lang="es" data-i18n-title="top.langEs">ES</button>
+          <button type="button" data-lang="en" lang="en" data-i18n-title="top.langEn">EN</button>
+        </div>
+        <button type="button" class="btn" id="btn-about" data-i18n="top.about" data-i18n-aria="top.aboutAria"></button>
+        <button type="button" class="btn btn-hema" id="btn-quiz" data-i18n="top.quiz"></button>
+        <button type="button" class="btn" id="btn-panel" data-i18n="top.panel" data-i18n-aria="top.panelAria" aria-expanded="true"></button>
+      </div>
+    </div>
+    <nav class="stage-row" id="stage-nav" data-i18n-aria="nav.aria"></nav>
+  </header>
+
+  <main id="main">
+    <section id="viewport" data-i18n-aria="view.aria">
+      <div id="gl-host"></div>
+      <div id="stage-badge" class="float-card mono"></div>
+      <div id="trace-hud" class="float-card" aria-live="polite"></div>
+      <div id="challenge-banner" class="float-card" role="status"></div>
+      <div id="legend" class="float-card"></div>
+      <div id="cam-controls" class="float-card">
+        <button type="button" class="btn btn-sm" id="cam-prev" data-i18n="cam.prev" data-i18n-title="cam.prevTitle"></button>
+        <button type="button" class="btn btn-sm" id="cam-center" data-i18n="cam.center" data-i18n-title="cam.centerTitle"></button>
+        <button type="button" class="btn btn-sm" id="cam-next" data-i18n="cam.next" data-i18n-title="cam.nextTitle"></button>
+      </div>
+      <div id="tooltip" role="tooltip"></div>
+      <div id="toast" role="status"></div>
+      <div id="fatal"><div><b data-i18n="app.fatalTitle"></b><p id="fatal-msg" style="margin:8px 0 0;font-size:13px"></p></div></div>
+    </section>
+    <aside id="editorial-sidebar" data-i18n-aria="sidebar.aria"></aside>
+  </main>
+</div>
+
+<div id="quiz-modal" role="dialog" aria-modal="true" aria-labelledby="quiz-title"></div>
+<div id="about-modal" role="dialog" aria-modal="true" aria-labelledby="about-title"></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
