@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Si usas este material, cítalo así. / If you use this material, please cite it as below."
+title: "PatologIA 3D — Patología Digital & IA: Laboratorio Interactivo 3D"
+type: software
+version: "2.0a"
+date-released: "2026-11-27"
+url: "https://savia-lab.github.io/project-patologia-ia/"
+repository-code: "https://github.com/SavIA-Lab/project-patologia-ia"
+abstract: "Curso interactivo y abierto sobre IA en patología y citología digital, con datos sintéticos, en español e inglés. / Open interactive course on AI in digital pathology and cytology, with synthetic data, in Spanish and English."
+authors:
+  - family-names: "Cardona-Mendoza"
+    given-names: "Andrés Felipe"
+    affiliation: "SavIA Lab–INMUBO, Universidad El Bosque"
+    # orcid: pendiente; el autor debe indicarlo (formato https://orcid.org/0000-0000-0000-0000)
+keywords:
+  - digital pathology
+  - cytology
+  - artificial intelligence
+  - multiple-instance learning
+  - education
+  - patología digital

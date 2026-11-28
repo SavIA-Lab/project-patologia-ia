@@ -1,0 +1,23 @@
+name: Sugerencia de contenido / Content suggestion
+description: Una idea para un módulo, una pregunta del cuestionario o una referencia / An idea for a module, a quiz question or a reference
+title: "[Contenido] "
+labels: ["content"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Qué propones / What you propose
+    validations:
+      required: true
+  - type: textarea
+    id: fuente
+    attributes:
+      label: Fuente (DOI o enlace) / Source (DOI or link)
+      description: Toda afirmación técnica o normativa necesita fuente. / Every technical or regulatory claim needs a source.
+    validations:
+      required: true
+  - type: textarea
+    id: donde
+    attributes:
+      label: Dónde encaja / Where it fits
+      placeholder: "Módulo, etapa o pregunta del cuestionario / Module, stage or quiz question"

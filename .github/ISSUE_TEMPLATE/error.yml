@@ -1,0 +1,39 @@
+name: Error / Bug
+description: Algo no funciona o se ve mal / Something fails or looks wrong
+title: "[Error] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "No incluyas datos personales ni de pacientes. / Do not include personal or patient data."
+  - type: input
+    id: modulo
+    attributes:
+      label: Módulo y modalidad / Module and modality
+      placeholder: "Etapa 3 · IHC (DAB)"
+    validations:
+      required: true
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para repetirlo / Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Qué esperabas y qué pasó / What you expected and what happened
+    validations:
+      required: true
+  - type: input
+    id: entorno
+    attributes:
+      label: Navegador, sistema, tamaño de ventana e idioma / Browser, system, window size and language
+      placeholder: "Chrome 130, Windows 11, 768 px, ES"
+    validations:
+      required: true
+  - type: textarea
+    id: consola
+    attributes:
+      label: Mensajes de la consola, si hay / Console messages, if any
+      render: text
