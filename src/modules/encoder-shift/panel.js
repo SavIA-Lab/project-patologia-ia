@@ -52,7 +52,7 @@ function drawHospitalThumbs() {
   if (pipeline.umap) pipeline.umap.hospThumbKey = key;
   HOSPITALS.forEach(h => {
     const cv = document.getElementById('hosp-' + h.key); if (!cv) return;
-    const ctx = cv.getContext('2d'); drawHighMag40xView(ctx, cv.width, cv.height, state.modality, aty, seed);
+    const ctx = cv.getContext('2d', { willReadFrequently: true }); drawHighMag40xView(ctx, cv.width, cv.height, state.modality, aty, seed);
     const img = ctx.getImageData(0, 0, cv.width, cv.height); applyColorProfile(img, HOSP_PROFILES[h.key], amount); ctx.putImageData(img, 0, 0);
     cv.dataset.k = key;
   });

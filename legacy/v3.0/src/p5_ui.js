@@ -42,10 +42,10 @@ const STAGES = [null,
       <span class="math-note"><span class="math-var">M</span>: aumento objetivo · <span class="math-var">W</span>×<span class="math-var">H</span>: área escaneada en µm · 3 bytes por píxel RGB sin comprimir.</span>`
   },
   {
-    title: 'Control de calidad (ALMA-QC) y teselado', sub: 'Cortar la lámina en parches y descartar los que no sirven', nav: 'QC & Teselado',
+    title: 'Control de calidad (módulo de QC simulado) y teselado', sub: 'Cortar la lámina en parches y descartar los que no sirven', nav: 'QC & Teselado',
     body: {
-      he: ['El modelo trabaja con <b>parches</b> de 224×224 o 512×512 px. Antes de usarlos, ALMA-QC mide la <b>varianza del Laplaciano</b>: un parche desenfocado casi no tiene bordes y su varianza cae. Pliegues, tinta y burbujas se detectan por color y textura.',
-        'Con el filtro apagado esos parches entran al encoder como si fueran tejido. Activa artefactos y apaga ALMA-QC para seguir cómo se propagan a las etapas siguientes.'],
+      he: ['El modelo trabaja con <b>parches</b> de 224×224 o 512×512 px. Antes de usarlos, el módulo de QC simulado mide la <b>varianza del Laplaciano</b>: un parche desenfocado casi no tiene bordes y su varianza cae. Pliegues, tinta y burbujas se detectan por color y textura.',
+        'Con el filtro apagado esos parches entran al encoder como si fueran tejido. Activa artefactos y apaga el módulo de QC para seguir cómo se propagan a las etapas siguientes.'],
       pap: ['En citología los problemas típicos son el <b>exceso de moco</b>, los acúmulos celulares gruesos y el desenfoque por el grosor del extendido. El fondo vacío es mayoritario, por eso se descarta antes de teselar.',
         'Un acúmulo grueso se parece a un grupo cohesivo hipercromático. Si pasa el filtro, el modelo puede confundirlo con una lesión.'],
       ihc: ['En IHC un pliegue oscuro o un trazo de tinta se parece a un marcaje DAB intenso. Un parche así produce una puntuación alta sin biología detrás, y el QC es la primera defensa.',
@@ -151,7 +151,7 @@ function sidebarStage2() {
       ${tog('artifacts.folds', 'Pliegues / Acúmulos', 'Bandas oscuras densas', 'sw-amber')}
       ${tog('artifacts.ink', 'Tinta de marcador', 'Trazo verde-azul oscuro en el borde', 'sw-amber')}
       ${tog('artifacts.bubbles', 'Burbujas / Hemorragia-Moco', 'Aire atrapado o exceso de moco', 'sw-amber')}
-      <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--line)">${tog('qcOn', 'Filtro QC automático (ALMA-QC)', 'ON: excluye las teselas con artefacto · OFF: pasan como válidas')}</div>
+      <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--line)">${tog('qcOn', 'Filtro QC automático (módulo de QC simulado)', 'ON: excluye las teselas con artefacto · OFF: pasan como válidas')}</div>
       <div class="note" id="s2-note"></div>
     </div>
     <div class="sec"><h3>Trazabilidad de un parche</h3>
@@ -301,8 +301,8 @@ function updateSidebarLive() {
       const note = $('#s2-note'); if (note) {
         const anyAct = activeArtifactKeys().length > 0;
         note.className = 'note ' + (hasUnfilteredArtifacts() ? 'bad' : (anyAct ? 'warn' : ''));
-        note.innerHTML = hasUnfilteredArtifacts() ? `<b>ALMA-QC apagado:</b> ${unf.length} teselas con artefacto pasan como válidas y contaminarán el UMAP (Etapa 3) y el MIL (Etapa 4).`
-          : (anyAct ? `<b>ALMA-QC activo:</b> ${rej.length} teselas rechazadas (Var. Laplaciana &lt; ${QC_LAPLACIAN_MIN} o patrón de pliegue, tinta o burbuja). No llegan al encoder.` : 'Activa uno o más artefactos para ver cómo los detecta el filtro.');
+        note.innerHTML = hasUnfilteredArtifacts() ? `<b>Módulo de QC apagado:</b> ${unf.length} teselas con artefacto pasan como válidas y contaminarán el UMAP (Etapa 3) y el MIL (Etapa 4).`
+          : (anyAct ? `<b>Módulo de QC activo:</b> ${rej.length} teselas rechazadas (Var. Laplaciana &lt; ${QC_LAPLACIAN_MIN} o patrón de pliegue, tinta o burbuja). No llegan al encoder.` : 'Activa uno o más artefactos para ver cómo los detecta el filtro.');
       }
     }
   } else if (n === 3) {
@@ -310,7 +310,7 @@ function updateSidebarLive() {
     setText('s3-batch-v', (mt.batch * 100).toFixed(0) + '%'); setText('s3-pur-v', (mt.purity * 100).toFixed(0) + '%'); setBar('s3-batch', mt.batch); setBar('s3-pur', mt.purity);
     const note = $('#s3-note'); if (note) {
       note.className = 'note ' + (mt.nContam ? 'bad' : '');
-      note.innerHTML = mt.nContam ? `<b>Clúster contaminante:</b> ${mt.nContam} parches con artefacto (ALMA-QC apagado) invaden el espacio latente y reducen la pureza.`
+      note.innerHTML = mt.nContam ? `<b>Clúster contaminante:</b> ${mt.nContam} parches con artefacto (módulo de QC apagado) invaden el espacio latente y reducen la pureza.`
         : (!state.encoderTrained ? 'Con pesos aleatorios los puntos no tienen estructura útil.' : (state.normMode === 'none' ? 'Los puntos se agrupan por <b>hospital/escáner</b>: efecto lote alto. Prueba Macenko o SSL.' : (state.normMode === 'macenko' ? 'Macenko alinea el color: el efecto lote baja, pero queda residuo.' : 'Representaciones invariantes al escáner: los grupos obedecen a la biología.')));
     }
     drawHospitalThumbs();
@@ -327,7 +327,7 @@ function updateSidebarLive() {
         const forced = hasUnfilteredArtifacts();
         note.className = 'note ' + (forced ? 'warn' : '');
         note.innerHTML = `Ground truth: <b>${state.groundTruth === 'pos' ? 'positiva' : 'negativa'}</b> · dilución ${(state.dilution * 100).toFixed(1)} % → ${S.K} instancia(s) positiva(s) de ${MIL_BAG_SIZE}.` +
-          (forced ? ' <b>Distractores activos</b> por artefactos sin filtrar de la Etapa 2.' : '') + (S.nExcl ? ` ${S.nExcl} instancias excluidas por ALMA-QC.` : '');
+          (forced ? ' <b>Distractores activos</b> por artefactos sin filtrar de la Etapa 2.' : '') + (S.nExcl ? ` ${S.nExcl} instancias excluidas por el módulo de QC.` : '');
       }
     }
   } else if (n === 5) {
@@ -388,17 +388,17 @@ function updateHUD() {
   const excluded = p.qcStatus === 'Rechazado por QC', bgx = p.tileType === 'fondo';
   if (n === 2) { st = `QC: <b>${p.qcStatus}</b> · Var. Lap. ${p.laplacian.toFixed(0)}`; cls = excluded ? 'bad' : (p.qcStatus === 'Artefacto sin filtrar' ? 'warn' : ''); }
   else if (n === 3) {
-    if (excluded) { st = '<b>Excluido por ALMA-QC:</b> no entra al encoder ni al UMAP.'; cls = 'bad'; }
+    if (excluded) { st = '<b>Excluido por el módulo de QC:</b> no entra al encoder ni al UMAP.'; cls = 'bad'; }
     else if (bgx) { st = '<b>Fondo:</b> descartado antes del encoder.'; cls = 'warn'; }
     else if (p.umapIndex >= UMAP_N) { st = `Punto UMAP #${p.umapIndex} · <b>contaminante</b> (artefacto sin filtrar)`; cls = 'bad'; }
     else if (p.umapIndex >= 0) { const sm = world.s3.umap.samples[p.umapIndex]; st = `Punto UMAP #${p.umapIndex} · ${MODALITIES[state.modality].clusters[sm.cluster].label}`; }
   } else if (n === 4) {
-    if (excluded) { st = '<b>Instancia excluida por ALMA-QC</b> (a<sub>k</sub> = 0).'; cls = 'bad'; }
+    if (excluded) { st = '<b>Instancia excluida por el módulo de QC</b> (a<sub>k</sub> = 0).'; cls = 'bad'; }
     else if (S && W) { st = `Instancia #${bi} · a<sub>k</sub> = <b>${(W[bi] * 100).toFixed(2)}%</b> (${AGG_LABEL[state.aggregator]})`; }
   } else {
     const hv = heatAt(p.u, p.v);
     st = `Calor XAI en el parche: <b>${hv.toFixed(2)}</b>${S ? ` · a<sub>k</sub> = ${(S.w.att[bi] * 100).toFixed(2)}%` : ''}`;
-    if (excluded) { st = '<b>Excluido por ALMA-QC</b> · sin contribución al mapa.'; cls = 'bad'; }
+    if (excluded) { st = '<b>Excluido por el módulo de QC</b> · sin contribución al mapa.'; cls = 'bad'; }
   }
   const sig = [n, p.col, p.row, p.thumbnailDataUrl.length, st, state.aggregator, state.stage, p.qcStatus].join('|');
   hud.classList.add('show');
@@ -608,7 +608,7 @@ function runHover() {
     const h = raycaster.intersectObject(world.s3.mesh, false)[0];
     if (h && h.instanceId !== undefined && contamActive(h.instanceId)) {
       const i = h.instanceId, U = world.s3.umap;
-      if (i >= UMAP_N) tip = `<div class="tt-t">Contaminante #${i}</div>${ttRow('origen', ARTIFACTS[U.contam[i - UMAP_N].key].label)}<div style="color:#FCA5A5">ALMA-QC apagado</div>`;
+      if (i >= UMAP_N) tip = `<div class="tt-t">Contaminante #${i}</div>${ttRow('origen', ARTIFACTS[U.contam[i - UMAP_N].key].label)}<div style="color:#FCA5A5">Módulo de QC apagado</div>`;
       else { const s = U.samples[i]; tip = `<div class="tt-t">Parche UMAP #${i}</div>${ttRow('morfología', MODALITIES[state.modality].clusters[s.cluster].label)}${ttRow('hospital', HOSPITALS[s.hosp].name)}${ttRow('u, v', s.u.toFixed(2) + ', ' + s.v.toFixed(2))}<div style="color:#94A3B8;margin-top:3px">clic para fijar este parche</div>`; cursor = 'pointer'; }
     }
   } else if (n === 4) {

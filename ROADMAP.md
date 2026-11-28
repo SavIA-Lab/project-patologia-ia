@@ -1,4 +1,4 @@
-# Patología Digital & IA — Laboratorio Interactivo · Hoja de ruta v2.x
+# Patología Digital & IA - Laboratorio Interactivo · Hoja de ruta v2.x
 
 Estado de partida: **v3.0** (archivo HTML único, 5 etapas, 3 modalidades, quiz de 8 preguntas).
 Destino: un curso interactivo, abierto y citable, publicado en GitHub (`SavIA-Lab/project-patologia-ia`) y desplegado con GitHub Pages en `savia-lab.github.io/project-patologia-ia`.
@@ -8,7 +8,7 @@ Destino: un curso interactivo, abierto y citable, publicado en GitHub (`SavIA-La
 ## 1. Objetivo y público
 
 - **Público:** personas de cualquier país que empiezan en IA aplicada a patología y citología digital y estudian en **español o inglés** (estudiantes de posgrado, residentes, bacteriología, tecnología médica, ingeniería, ciencia de datos en salud).
-- **Título en inglés (propuesto):** *Digital Pathology & AI — Interactive 3D Lab*.
+- **Título en inglés (propuesto):** *Digital Pathology & AI - Interactive 3D Lab*.
 - **Qué deben poder hacer al terminar:** explicar cada componente de un pipeline (muestra, escáner, WSI, teselado, encoder, MIL, evaluación), saber qué etiqueta necesita cada enfoque, reconocer por qué fallan los modelos al cambiar de centro o de escáner, leer un artículo del área con ojo crítico y plantear un proyecto propio.
 - **Posicionamiento:** referente bilingüe (español e inglés) con raíz en América Latina y énfasis en **citología**, un campo menos cubierto que la histología H&E. Los ejemplos de Colombia y de la región se presentan como casos, junto con el marco internacional, para que el curso sirva a quien estudie en cualquier país.
 
@@ -35,7 +35,7 @@ Destino: un curso interactivo, abierto y citable, publicado en GitHub (`SavIA-La
 5. **Mostrar el fallo:** cada módulo incluye un caso en el que el método se rompe y por qué.
 6. **Equipos modestos:** modo ligero en 2D, funcionamiento sin conexión, texto legible en tablet.
 7. **Revisión de contenido en dos pasos** (citopatología y patología): revisión inicial del director del proyecto y revisión senior por especialistas antes de cada release, con crédito visible si los revisores lo aceptan.
-8. **Dos idiomas completos:** todo texto visible sale del diccionario de idiomas; un módulo no se cierra si falta una de las dos versiones. Cada término técnico tiene una equivalencia fija ES–EN en el glosario. El inglés lo revisa una persona; no se publica traducción automática sin revisar.
+8. **Dos idiomas completos:** todo texto visible sale del diccionario de idiomas; un módulo no se cierra si falta una de las dos versiones. Cada término técnico tiene una equivalencia fija ES-EN en el glosario. El inglés lo revisa una persona; no se publica traducción automática sin revisar.
 9. **Procedencia de cada cifra:** toda cifra o resultado en pantalla lleva una de cinco etiquetas: *cálculo exacto*, *procesamiento real de imagen* (sobre imágenes sintéticas), *simulación pedagógica*, *especificación verificada de un encoder* (con fuente y fecha) o *resultado experimental real* (con fuente). Nunca se mezclan en un mismo valor.
 
 ## 4. Arquitectura y despliegue
@@ -58,10 +58,10 @@ Destino: un curso interactivo, abierto y citable, publicado en GitHub (`SavIA-La
   - [ ] Sin cadenas fijas en el código: todo en `es.json` y `en.json`, con las mismas claves.
   - [ ] Números, decimales y unidades con `Intl` según el idioma; fórmulas y símbolos iguales en ambos.
   - [ ] En los dos idiomas: banco de preguntas, glosario, comentarios de los fragmentos de código, guía del docente, "Acerca de" y README. Las referencias bibliográficas no se traducen.
-  - [ ] Glosario ES–EN como documento de control (`docs/glosario-es-en.md`) con la forma preferida de cada término.
+  - [ ] Glosario ES-EN como documento de control (`docs/glosario-es-en.md`) con la forma preferida de cada término.
   - [ ] Pruebas automáticas: (a) las dos lenguas tienen las mismas claves; (b) no hay cadenas fijas en la interfaz; (c) recorrido de todos los módulos en ES y en EN sin errores de consola; (d) revisión de desbordamiento en ancho de escritorio y de tablet, porque los textos miden distinto en cada idioma.
   - [ ] La lista de palabras prohibidas del proyecto aplica también a los textos en inglés.
-- [ ] Pantalla "Acerca de": autor Andrés Felipe Cardona-Mendoza, investigador de SavIA Lab–INMUBO, Universidad El Bosque; declara que la herramienta se desarrolló usando Claude Sonnet 5.5; logotipo de SavIA Lab (el de la herramienta se crea después); sin logotipos de universidades hasta tener autorización escrita.
+- [ ] Pantalla "Acerca de": autor Andrés Felipe Cardona-Mendoza, investigador de SavIA Lab-INMUBO, Universidad El Bosque; declara que la herramienta se desarrolló usando Claude Sonnet 5.5; logotipo de SavIA Lab (el de la herramienta se crea después); sin logotipos de universidades hasta tener autorización escrita.
 
 ## 5. Plantilla de módulo
 
@@ -77,7 +77,7 @@ Cada módulo cumple esta ficha antes de darse por terminado:
 - 4 a 6 preguntas propias para el banco del quiz
 - Referencias con DOI
 - Etiqueta "real / simulado" y etiqueta de procedencia de cada cifra (principio 9)
-- Todos los textos del módulo en español e inglés, con los términos del glosario ES–EN
+- Todos los textos del módulo en español e inglés, con los términos del glosario ES-EN
 - Guía del docente (ver sección 8)
 
 ## 6. Módulos (orden de aprendizaje)
@@ -105,7 +105,7 @@ Amplía la etapa 1 actual: formatos (SVS, NDPI, MRXS, TIFF piramidal, DICOM para
 ### M3 · QC, segmentación de tejido y teselado · v2.0c · E: M
 Amplía la etapa 2: segmentación de tejido (umbral, HSV), tamaño de tesela, solapamiento, aumento elegido, filtros de calidad, desenfoque, pliegues, tinta, burbujas.
 
-**Ruta P (C, D1–D6, I y parte de L):** anatomía de un parche y recorrido lámina → región → tesela → remuestreo → tensor → encoder → embedding; tamaño de extracción, tamaño de entrada del encoder y MPP efectivo como tres cosas distintas; paso (stride), solapamiento y conteo de teselas con políticas de borde; calculadoras 1 a 6; el umbral de calidad según la resolución; scripts de extracción.
+**Ruta P (C, D1-D6, I y parte de L):** anatomía de un parche y recorrido lámina → región → tesela → remuestreo → tensor → encoder → embedding; tamaño de extracción, tamaño de entrada del encoder y MPP efectivo como tres cosas distintas; paso (stride), solapamiento y conteo de teselas con políticas de borde; calculadoras 1 a 6; el umbral de calidad según la resolución; scripts de extracción.
 
 ### M4 · Encoders y espacios latentes · v2.1a · E: A
 - **De píxeles a vector:** recorrido de una tesela por un ViT (división en tokens, token CLS, matriz de atención) hasta su embedding.
@@ -177,7 +177,7 @@ Pérdida, desbalance de clases, validación cruzada repetida, cohorte de reserva
 ### M10 · Evaluación y explicabilidad · v2.4 · E: M
 **Ruta P (N):** cómo evaluar una estrategia de extracción (nivel de parche y de lámina, particiones por paciente, semillas, regiones equivalentes cuando se aísla el efecto del remuestreo, advertencia sobre el uso de UMAP como prueba).
 
-Amplía la etapa 5: ROC y curva precisión–sensibilidad, intervalos por bootstrap, calibración, curva de decisión; umbral clínico; **la atención no es una explicación** frente a Grad-CAM, rollout de atención y gradientes integrados.
+Amplía la etapa 5: ROC y curva precisión-sensibilidad, intervalos por bootstrap, calibración, curva de decisión; umbral clínico; **la atención no es una explicación** frente a Grad-CAM, rollout de atención y gradientes integrados.
 
 ### M11 · Cuantificación (IHC) · v2.4 · E: M *(nuevo)*
 Usa la modalidad IHC (DAB): deconvolución de color (HED), detección de núcleos positivos, porcentaje de positividad, H-score, índice de proliferación; variabilidad entre lectores y entre escáneres.
@@ -188,7 +188,7 @@ Sistema Bethesda (NILM, ASC-US, ASC-H, LSIL, HSIL, AGC, carcinoma escamoso), con
 **Ruta P (H, K, M, L y calculadora 7, v2.5):** caso de estudio de un pipeline de citología cervical con MIL tipo CLAM (extracción de parches, QC, codificación, agregación y atención), explicado con datos sintéticos, código propio y seudocódigo, citando CLAM sin copiar su código; asistente de diseño de experimentos, tutoriales de QuPath y PyTorch, esquema de metadatos de trazabilidad.
 
 ### M13 · Del laboratorio a la clínica · v2.5 · E: M *(nuevo)*
-Flujo humano–IA (triaje, segundo lector, ayuda a la detección frente a ayuda al diagnóstico), integración con el sistema del laboratorio, regulación (caso regional: INVIMA; marco internacional: FDA y marcado CE en la UE) [verificar], ética, equidad, telepatología, costos y conectividad en LATAM y en entornos de recursos limitados, conjuntos de datos públicos [verificar licencias y vigencia].
+Flujo humano-IA (triaje, segundo lector, ayuda a la detección frente a ayuda al diagnóstico), integración con el sistema del laboratorio, regulación (caso regional: INVIMA; marco internacional: FDA y marcado CE en la UE) [verificar], ética, equidad, telepatología, costos y conectividad en LATAM y en entornos de recursos limitados, conjuntos de datos públicos [verificar licencias y vigencia].
 
 ### M14 · Lectura crítica de artículos · v2.5 · E: B *(nuevo)*
 Lista de verificación guiada con señales de alerta: fuga de datos, ausencia de validación externa, un solo escáner, prueba pequeña, métricas sin intervalos, atención presentada como explicación. Listas de reporte (CLAIM, TRIPOD+AI, STARD-AI [verificar]). Ejercicio: resúmenes sintéticos de "artículos" con fallos escondidos.
@@ -261,7 +261,7 @@ Pensado para que otros profesores de la región y de otros países lo adopten, e
 
 ### v2.0a · Cimientos
 - [ ] Repositorio Vite, registro de módulos, carga diferida, dependencias locales
-- [ ] **Sistema de idiomas ES/EN con selector** (sección 4), glosario ES–EN, estructura de referencias
+- [ ] **Sistema de idiomas ES/EN con selector** (sección 4), glosario ES-EN, estructura de referencias
 - [ ] Extraer a `es.json` todas las cadenas de la v3.0 y traducirlas al inglés (interfaz, quiz, fórmulas, rótulos de escena)
 - [ ] Cerrar deuda de v3.0 (ver sección 11), salvo los puntos de la ruta P
 - [ ] Pruebas automáticas e integración continua
@@ -357,7 +357,7 @@ Pensado para que otros profesores de la región y de otros países lo adopten, e
 | Errores de contenido | Revisión de especialistas y referencias con DOI por afirmación |
 | Rendimiento en equipos modestos | Modo 2D, carga diferida, presupuesto de objetos por escena |
 | Mantenimiento tras publicar | Plantillas de issues, versionado, pruebas automáticas |
-| Dos idiomas duplican redacción y revisión (estimación propia: 20 a 30 % más de trabajo por módulo) | Cadenas en diccionario desde el primer día, glosario ES–EN, el inglés se redacta junto al español y no después, revisión por módulo |
+| Dos idiomas duplican redacción y revisión (estimación propia: 20 a 30 % más de trabajo por módulo) | Cadenas en diccionario desde el primer día, glosario ES-EN, el inglés se redacta junto al español y no después, revisión por módulo |
 | Inglés sin revisión pierde credibilidad ante un público internacional | Revisor del inglés con formación técnica; ninguna versión en inglés sale sin revisar |
 | La ruta P es el mayor añadido del plan (no se estima un porcentaje sin medirlo) | Se reparte en las fases de sus módulos anfitriones; recortes en este orden: carga de imágenes locales, tutoriales de QuPath, fichas del atlas fuera del subconjunto inicial, exportación de la calculadora 9, asistente reducido a una hoja de configuración |
 | Una cifra de la ruta P enseña algo falso (aproximaciones de MPP, fichas de encoders desactualizadas) | Motor con pruebas, etiqueta de procedencia en cada cifra, fecha de verificación y fuente por ficha, revisión contra la lista de afirmaciones prohibidas |
@@ -366,7 +366,7 @@ Pensado para que otros profesores de la región y de otros países lo adopten, e
 
 ## 14. Datos que se deben verificar con fuentes antes de escribirlos
 
-Marcados con [verificar] arriba. Lista resumen: familias y ejemplos de escáneres; formatos WSI y DICOM; fichas de modelos fundacionales (dimensión, datos, licencia); modelos MIL recientes; formatos de anotación; herramientas de segmentación; categorías y flujo de Bethesda; normativa de datos e investigación en Colombia; regulación INVIMA y FDA; conjuntos de datos públicos y sus licencias; listas de reporte (CLAIM, TRIPOD+AI, STARD-AI); equivalencias ES–EN de la terminología de citología y de Bethesda; marcos de protección de datos y regulación fuera de Colombia (RGPD, HIPAA, FDA, marcado CE); fichas de la ruta P (arquitectura, entrada, token, dimensión, datos, resolución física y licencia de cada encoder del atlas; MPP típicos por escáner; formatos de pirámide y niveles de OpenSlide); licencias de código y pesos de los modelos citados.
+Marcados con [verificar] arriba. Lista resumen: familias y ejemplos de escáneres; formatos WSI y DICOM; fichas de modelos fundacionales (dimensión, datos, licencia); modelos MIL recientes; formatos de anotación; herramientas de segmentación; categorías y flujo de Bethesda; normativa de datos e investigación en Colombia; regulación INVIMA y FDA; conjuntos de datos públicos y sus licencias; listas de reporte (CLAIM, TRIPOD+AI, STARD-AI); equivalencias ES-EN de la terminología de citología y de Bethesda; marcos de protección de datos y regulación fuera de Colombia (RGPD, HIPAA, FDA, marcado CE); fichas de la ruta P (arquitectura, entrada, token, dimensión, datos, resolución física y licencia de cada encoder del atlas; MPP típicos por escáner; formatos de pirámide y niveles de OpenSlide); licencias de código y pesos de los modelos citados.
 
 ## 15. Preguntas abiertas
 

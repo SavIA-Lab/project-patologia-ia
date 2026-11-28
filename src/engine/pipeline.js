@@ -1,7 +1,7 @@
 /* Cálculos del pipeline que no dependen de la escena 3D: evaluación de teselas, bolsa MIL, nube de parches
  * (UMAP simulado), mapa de calor y evaluación del reto. Se calculan aunque el módulo correspondiente aún no
  * se haya cargado (carga diferida), de modo que el parche fijado se pueda seguir entre etapas.
- * Lógica migrada de la v3.0 (p4_stage345.js §10–12 y p3_scene.js §9). Cambios: los datos viven en
+ * Lógica migrada de la v3.0 (p4_stage345.js §10-12 y p3_scene.js §9). Cambios: los datos viven en
  * `pipeline` (src/engine/state.js) en lugar de `world.s2…s5`; las clases del reto pasan a códigos. */
 import { MODALITIES, HOSPITALS, NORM_MODES, UNTRAINED_METRICS, CONTAM_COLOR } from './modalities.js';
 import { state, dirty, pipeline, hasUnfilteredArtifacts, activeArtifactKeys } from './state.js';

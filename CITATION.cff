@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Si usas este material, cítalo así. / If you use this material, please cite it as below."
-title: "PatologIA 3D — Patología Digital & IA: Laboratorio Interactivo 3D"
+title: "PatologIA 3D - Patología Digital & IA: Laboratorio Interactivo 3D"
 type: software
 version: "2.0a"
 date-released: "2026-11-27"
@@ -10,7 +10,7 @@ abstract: "Curso interactivo y abierto sobre IA en patología y citología digit
 authors:
   - family-names: "Cardona-Mendoza"
     given-names: "Andrés Felipe"
-    affiliation: "SavIA Lab–INMUBO, Universidad El Bosque"
+    affiliation: "SavIA Lab-INMUBO, Universidad El Bosque"
     # orcid: pendiente; el autor debe indicarlo (formato https://orcid.org/0000-0000-0000-0000)
 keywords:
   - digital pathology

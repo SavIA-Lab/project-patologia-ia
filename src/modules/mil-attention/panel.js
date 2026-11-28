@@ -18,7 +18,7 @@ export function panelHTML() {
     </div>
     <div class="sec"><h3>${t('s4.compare')}</h3>
       <table class="tbl"><thead><tr><th>${t('s4.th.agg')}</th><th>Ŷ</th><th>${t('s4.th.maxA')}</th><th>${t('s4.th.label')}</th></tr></thead><tbody>
-      ${rows.map(([k, l]) => `<tr id="t4-row-${k}"><td>${l}</td><td id="t4-y-${k}">—</td><td id="t4-w-${k}">—</td><td><span class="chip" id="t4-l-${k}">—</span></td></tr>`).join('')}
+      ${rows.map(([k, l]) => `<tr id="t4-row-${k}"><td>${l}</td><td id="t4-y-${k}">-</td><td id="t4-w-${k}">-</td><td><span class="chip" id="t4-l-${k}">-</span></td></tr>`).join('')}
       </tbody></table>
       <p style="font-size:11.5px;color:var(--ink2);margin:8px 0 0">${t('s4.compareHint', { thr: fmt.num(0.5, 2) })}</p>
     </div>
