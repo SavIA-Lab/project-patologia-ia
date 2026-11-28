@@ -3,7 +3,7 @@
 import { state, dirty, getPath, hooks } from '../engine/state.js';
 import { MODALITIES, modName, modDiagnosis } from '../engine/modalities.js';
 import { tileTypeLabel } from '../engine/bio.js';
-import { MODULES } from '../modules/registry.js';
+import { MODULES, LEGACY_STAGE_TOTAL } from '../modules/registry.js';
 import { active, activeMeta } from './active.js';
 import { $, $$ } from '../ui/dom.js';
 import { FMT } from '../ui/widgets.js';
@@ -27,13 +27,18 @@ export function applyStaticI18n() {
 /* ---------- Navegación entre módulos ---------- */
 export function renderStageNav() {
   const nav = $('#stage-nav');
-  nav.innerHTML = MODULES.map((m, i) => `<button type="button" class="stage-btn" data-stage="${i + 1}" aria-label="${i + 1}. ${t(m.nav)}"><span class="num">${i + 1}</span><span class="lbl">${i + 1}. ${t(m.nav)}</span></button>`).join('');
+  nav.innerHTML = MODULES.map((m, i) => {
+    const off = state.track !== 'all' && !(m.track || []).includes(state.track);
+    return `<button type="button" class="stage-btn${off ? ' off' : ''}" data-stage="${i + 1}" data-track="${(m.track || []).join(' ')}" aria-label="${m.code} ${t(m.nav)}"><span class="num">${m.code}</span><span class="lbl">${t(m.nav)}</span></button>`;
+  }).join('');
+  syncControls();
 }
 
 /* ---------- Panel lateral ---------- */
 function headHTML(n) {
   const meta = MODULES[n - 1], M = MODALITIES[state.modality], key = 'module.' + meta.id;
-  return `<div class="kicker">${t('common.stage', { n, total: MODULES.length })}</div>
+  const kicker = meta.stageNo ? t('common.stage', { n: meta.stageNo, total: LEGACY_STAGE_TOTAL }) : t('common.module', { code: meta.code });
+  return `<div class="kicker">${kicker}</div>
     <h2 class="stage-title">${t(key + '.title')}</h2>
     <p class="stage-sub">${t(key + '.sub')}</p>
     <span class="mod-pill"><i style="background:${M.accent}"></i>${modName(M)} · ${modDiagnosis(M)}</span> <span class="sim-tag">${t('common.simulated')}</span>
@@ -45,6 +50,8 @@ export function renderSidebar(keepScroll) {
   const top = sb.scrollTop, n = state.stage;
   sb.innerHTML = headHTML(n) + mod.panel.html() + `<div class="foot mono">${t('common.footer')}</div>`;
   sb.scrollTop = keepScroll ? top : 0;
+  const w = $('#work2d');
+  if (mod.workspace) { const wt = w.scrollTop; w.innerHTML = mod.workspace.html(); w.scrollTop = keepScroll ? wt : 0; if (mod.workspace.afterRender) mod.workspace.afterRender(); } else w.innerHTML = '';
   syncControls();
   dirty.sidebarLive = true;
   if (mod.panel.afterRender) dirty.top3Thumbs = true;
@@ -55,6 +62,7 @@ export function syncControls() {
     b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
   $$('[data-toggle]').forEach(i => { i.checked = !!getPath(state, i.dataset.toggle); });
+  $$('[data-field]').forEach(i => { if (document.activeElement === i) return; const v = getPath(state, i.dataset.field); i.value = v === null || v === undefined ? '' : String(v); });
   $$('[data-slider]').forEach(i => {
     const key = i.dataset.slider, sc = parseFloat(i.dataset.scale || 1), v = getPath(state, key);
     if (document.activeElement !== i) i.value = Math.round(v / sc * 1000) / 1000;
@@ -62,13 +70,14 @@ export function syncControls() {
   });
   $$('.stage-btn').forEach(b => { const on = +b.dataset.stage === state.stage; b.classList.toggle('active', on); if (on) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
 }
-export function updateSidebarLive() { const mod = active(); if (mod && mod.panel.live) mod.panel.live(); }
+export function updateSidebarLive() { const mod = active(); if (mod && mod.panel.live) mod.panel.live(); if (mod && mod.workspace && mod.workspace.live) mod.workspace.live(); }
 
 /* ---------- Leyenda ---------- */
 export function updateLegend() {
   const mod = active(); if (!mod) return;
-  $('#legend').innerHTML = mod.legend();
-  $('#stage-badge').textContent = t('common.stageBadge', { n: state.stage, total: MODULES.length, nav: t(activeMeta().nav) });
+  const meta = activeMeta();
+  $('#legend').innerHTML = mod.legend ? mod.legend() : '';
+  $('#stage-badge').textContent = meta.stageNo ? t('common.stageBadge', { n: meta.stageNo, total: LEGACY_STAGE_TOTAL, nav: t(meta.nav) }) : `${meta.code} · ${t(meta.nav)}`;
 }
 
 /* ---------- Trazabilidad del parche fijado ---------- */
@@ -76,7 +85,7 @@ let hudSig = '';
 hooks.resetHud = () => { hudSig = ''; };
 export function updateHUD() {
   const hud = $('#trace-hud'), p = state.pinned, mod = active();
-  if (!p || state.stage < 2 || !mod || !mod.trace) { hud.classList.remove('show'); hudSig = ''; return; }
+  if (!p || !mod || !mod.trace) { hud.classList.remove('show'); hudSig = ''; return; }
   const n = state.stage, { st, cls } = mod.trace(p);
   const sig = [n, p.col, p.row, p.thumbnailDataUrl.length, st, state.aggregator, p.qcStatus, getLang()].join('|');
   hud.classList.add('show');
@@ -84,7 +93,7 @@ export function updateHUD() {
   hud.innerHTML = `<div class="hud-head"><span class="hud-title">${t('hud.title')}</span><button type="button" class="btn btn-sm" data-action="unpin" style="padding:2px 8px">${t('hud.unpin')}</button></div>
     <div class="hud-body"><img class="hud-thumb" src="${p.thumbnailDataUrl}" alt="${t('hud.thumbAlt')}"><div class="hud-info mono"><div><span class="k">(col, row)</span> (${p.col}, ${p.row})</div><div><span class="k">${t('hud.type')}</span> ${tileTypeLabel(p.tileType)}</div><div><span class="k">${t('hud.atypia')}</span> ${fmt.num(p.atypia, 2)}</div><div><span class="k">u,v</span> ${fmt.num(p.u, 3)}, ${fmt.num(p.v, 3)}</div></div></div>
     <div class="hud-state ${cls}">${st}</div>
-    <div class="hud-links">${MODULES.map((m, i) => i === 0 ? '' : `<button type="button" data-goto="${i + 1}" class="${i + 1 === n ? 'cur' : ''}">${t('hud.stageShort', { n: i + 1 })}</button>`).join('')}</div>`;
+    <div class="hud-links">${MODULES.map((m, i) => m.stageNo ? `<button type="button" data-goto="${i + 1}" class="${i + 1 === n ? 'cur' : ''}">${t('hud.stageShort', { n: m.stageNo })}</button>` : '').join('')}</div>`;
 }
 
 /* ---------- Banner del reto ---------- */

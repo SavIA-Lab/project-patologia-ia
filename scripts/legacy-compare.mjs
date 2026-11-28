@@ -52,9 +52,10 @@ const [L, N] = [await open(legacyUrl, false), await open(srv.url, true)];
 const rows = [];
 const shot = async (p, name) => { const path = join(OUT, name); await p.screenshot({ path }); return PNG.sync.read(readFileSync(path)); };
 for (const modality of ['he', 'pap', 'ihc']) {
-  for (const stage of [1, 2, 3, 4, 5]) {
-    for (const { page } of [L, N]) {
-      await page.evaluate((m, s) => { window.__pdia.setState('modality', m); window.__pdia.setStage(s, true); }, modality, stage);
+  // Desde la v2.0b las etapas E2 a E5 de la v3.0 son los módulos 4 a 7 (la etapa 1 pasó a ser M2 y ya no se compara)
+  for (const stage of [2, 3, 4, 5]) {
+    for (const { page, nuevo } of [{ ...L, nuevo: false }, { ...N, nuevo: true }]) {
+      await page.evaluate((m, s) => { window.__pdia.setState('modality', m); window.__pdia.setStage(s, true); }, modality, nuevo ? stage + 2 : stage);
       await new Promise(r => setTimeout(r, 1800));
     }
     const a = await shot(L.page, `legacy-${modality}-${stage}.png`), b = await shot(N.page, `nuevo-${modality}-${stage}.png`);
