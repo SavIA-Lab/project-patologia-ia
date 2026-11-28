@@ -12,7 +12,8 @@ import {
   syncTileGrid, computeTileInfos, rebuildUmapData, recomputeBagRank, computeBag, computeMIL, updateUmapTargets, computeHeatField
 } from '../engine/pipeline.js';
 import { MODULES, loadModuleDefinition } from '../modules/registry.js';
-import { loaded, active, callHooks } from './active.js';
+import { crearPerfil } from '../engine/scanner-math.js';
+import { loaded, active, callHooks, isStage } from './active.js';
 import { refreshPinned, pinQuick, unpin } from './pin.js';
 import {
   applyStaticI18n, renderStageNav, renderSidebar, syncControls, updateSidebarLive, updateLegend, updateHUD, updateBanner, resetBanner, resetHudSig
@@ -21,6 +22,7 @@ import { $, toast, showFatal } from '../ui/dom.js';
 import { pointerPx, showTooltip, hideTooltip } from '../ui/tooltip.js';
 import { openQuiz, closeQuiz, bindQuiz, refreshQuizIfOpen, quiz } from '../ui/quiz.js';
 import { openAbout, closeAbout, bindAbout, refreshAboutIfOpen } from '../ui/about.js';
+import { bindGlossary, refreshGlossary } from '../ui/glossary.js';
 import { RELEASE } from './version.js';
 import { initLang, setLang, onLangChange, getLang, t, fmt } from '../i18n/index.js';
 
@@ -35,7 +37,9 @@ export function setState(path, value) {
 }
 function onStateChange(path) {
   if (path === 'modality') return changeModality();
-  if (path === 'pyramidLevel' || path === 'showPyramid' || path === 'showGigaGrid') { callHooks('stage1State'); dirty.sidebarLive = true; }
+  if (path.startsWith('scannerProfile.mpp')) { state.scannerProfile.mppSource = 'user'; state.m1.mppEdited = true; dirty.sidebarLive = true; }
+  else if (path.startsWith('m1.')) { state.scannerProfile = profileFromM1(); dirty.sidebarLive = true; dirty.legend = true; }
+  else if (path.startsWith('m2.') || path === 'scannerProfile' || path === 'track') { dirty.sidebarLive = true; if (path === 'track') renderStageNav(); }
   else if (path === 'patchSize') { syncTileGrid(); callHooks('rebuildTiles'); dirty.tiles = true; dirty.sidebarLive = true; }
   else if (path === 'discardBg' || path === 'explode') { dirty.tilesVisual = true; }
   else if (path.startsWith('artifacts.') || path === 'qcOn') { markArtifactsChanged(); dirty.legend = true; }
@@ -54,7 +58,7 @@ function changeModality() {
   rebuildUmapData(); recomputeBagRank();
   pipeline.bio = null;
   callHooks('modality');
-  dirty.composite = false; dirty.tiles = true; dirty.bag = true; dirty.mil = true; dirty.umap = true; dirty.pyramidTex = true; dirty.heat = true; dirty.heatColor = true; dirty.sidebarLive = true; dirty.legend = true; dirty.top3Thumbs = true;
+  dirty.composite = false; dirty.tiles = true; dirty.bag = true; dirty.mil = true; dirty.umap = true; dirty.heat = true; dirty.heatColor = true; dirty.sidebarLive = true; dirty.legend = true; dirty.top3Thumbs = true;
   resetHudSig(); resetBanner();
   renderSidebar(true); updateLegend();
   toast('app.toast.modality', { name: modName(M), dil: fmt.pct(M.defaultDilution, 1) });
@@ -72,21 +76,36 @@ async function ensureModule(id) {
 }
 export async function setStage(n, instant) {
   n = Math.max(1, Math.min(MODULES.length, n));
-  const seq = ++stageSeq, meta = MODULES[n - 1];
+  const seq = ++stageSeq, meta = MODULES[n - 1], is2d = meta.kind === '2d';
   let mod;
   try { mod = await ensureModule(meta.id); } catch (err) { showFatal(err); return; }
   if (seq !== stageSeq) return;    // se pidió otra etapa mientras cargaba esta
   state.stage = n;
-  loaded.forEach((m, id) => { stageGroups[id].visible = id === meta.id; });
-  if (camera) flyToPreset(meta.camera, instant ? 0.01 : 0.9);
+  loaded.forEach((m, id) => { if (stageGroups[id]) stageGroups[id].visible = id === meta.id; });
+  $('#viewport').classList.toggle('is-2d', is2d); $('#gl-host').hidden = is2d; $('#work2d').hidden = !is2d;
+  $('#cam-center').hidden = is2d;
+  if (camera && !is2d) flyToPreset(meta.camera, instant ? 0.01 : 0.9);
   if (mod.leave) mod.leave();
   hideTooltip();
-  dirty.pyramidTex = true; dirty.heat = true; dirty.heatColor = true; dirty.sidebarLive = true; dirty.top3Thumbs = true; dirty.legend = true;
+  dirty.heat = true; dirty.heatColor = true; dirty.sidebarLive = true; dirty.top3Thumbs = true; dirty.legend = true;
   resetHudSig(); resetBanner();
   renderSidebar(false); updateLegend(); updateBanner();
   $('#cam-prev').disabled = n === 1; $('#cam-next').disabled = n === MODULES.length;
   syncControls();
 }
+/** Perfil de escáner derivado de los controles de M1 (dato compartido). Un MPP editado a mano se conserva al cambiar de objetivo solo si el usuario lo fijó. */
+function profileFromM1() {
+  const m = state.m1, cur = state.scannerProfile;
+  const keepMpp = m.mppEdited && cur && cur.mppSource === 'user';
+  const input = { family: m.family, objective: m.objective, scanMode: m.scanMode, zPlanes: m.zPlanes, zStepUm: m.zStepUm, focusPoints: m.focusPoints, compression: { kind: m.compression } };
+  if (keepMpp) input.mpp = cur.mpp;
+  try { return crearPerfil(input); } catch (err) { return cur; }
+}
+export async function gotoModule(n, anchor) {
+  await setStage(n);
+  if (anchor) { const el = document.getElementById(anchor); if (el) { el.scrollIntoView({ block: 'start' }); if (el.focus) { el.setAttribute('tabindex', '-1'); el.focus({ preventScroll: true }); } } }
+}
+const moduleIndexById = id => MODULES.findIndex(m => m.id === id);
 function handleAction(a, el) {
   if (a === 'pin-atypical') pinQuick('atypical');
   else if (a === 'pin-healthy') pinQuick('healthy');
@@ -103,17 +122,16 @@ function handleAction(a, el) {
    Bucle de recálculo y de dibujo
    ===================================================================== */
 export function processDirty() {
-  if (dirty.composite) { dirty.composite = false; rebuildCompositeTexture(); dirty.pyramidTex = true; dirty.sidebarLive = true; if (pipeline.umap) pipeline.umap.hospThumbKey = ''; }
+  if (dirty.composite) { dirty.composite = false; rebuildCompositeTexture(); dirty.sidebarLive = true; if (pipeline.umap) pipeline.umap.hospThumbKey = ''; }
   if (dirty.tiles) { dirty.tiles = false; computeTileInfos(); callHooks('tiles'); refreshPinned(); dirty.sidebarLive = true; }
   if (dirty.tilesVisual) { dirty.tilesVisual = false; callHooks('tilesVisual'); }
   if (dirty.bag) { dirty.bag = false; computeBag(); dirty.mil = true; }
   if (dirty.mil) { dirty.mil = false; computeMIL(); callHooks('mil'); dirty.heat = true; dirty.sidebarLive = true; }
   if (dirty.umap) { dirty.umap = false; updateUmapTargets(); callHooks('umap'); dirty.sidebarLive = true; dirty.legend = true; }
   const mod = active();
-  if (state.stage === 5 && dirty.heat) { dirty.heat = false; computeHeatField(); }
-  if (state.stage === 5 && dirty.heatColor) callHooks('heatColor');
+  if (isStage('xai-threshold') && dirty.heat) { dirty.heat = false; computeHeatField(); }
+  if (isStage('xai-threshold') && dirty.heatColor) callHooks('heatColor');
   if (dirty.top3Thumbs && mod && mod.panel.afterRender) { dirty.top3Thumbs = false; mod.panel.afterRender(); }
-  if (state.stage === 1 && dirty.pyramidTex) { dirty.pyramidTex = false; callHooks('pyramidTex'); }
   if (dirty.legend) { dirty.legend = false; updateLegend(); }
   if (dirty.sidebarLive) { dirty.sidebarLive = false; updateSidebarLive(); updateHUD(); updateBanner(); }
 }
@@ -129,11 +147,11 @@ function animate() {
   stepCamTween(dt); controls.update();
   const mod = active();
   if (mod) {
-    mod.animate(dt, tm);
+    if (mod.animate) mod.animate(dt, tm);
     if (mod.liveInterval) { liveTick += dt; if (liveTick > mod.liveInterval) { liveTick = 0; dirty.sidebarLive = true; } }
   }
   if (hoverDirty || (mod && mod.hoverEveryFrame)) { if (pointerIn) runHover(); hoverDirty = false; }
-  renderer.render(scene, camera);
+  if (!mod || mod.kind !== '2d') renderer.render(scene, camera);
 }
 
 /* =====================================================================
@@ -171,10 +189,16 @@ function bindEvents() {
     if (s) { let v = s.dataset.value; if (s.dataset.num) v = parseFloat(v); else if (v === 'true') v = true; else if (v === 'false') v = false; setState(s.dataset.set, v); return; }
     const l = e.target.closest('[data-lang]'); if (l) { changeLanguage(l.dataset.lang); return; }
     const a = e.target.closest('[data-action]'); if (a) { handleAction(a.dataset.action, a); return; }
-    const g = e.target.closest('[data-goto]'); if (g) { setStage(+g.dataset.goto); return; }
+    const g = e.target.closest('[data-goto]'); if (g) { gotoModule(+g.dataset.goto, g.dataset.anchor); return; }
+    const sj = e.target.closest('[data-jump]'); if (sj) { gotoModule(moduleIndexById(sj.dataset.jump) + 1, sj.dataset.anchor); return; }
     const st = e.target.closest('.stage-btn'); if (st) setStage(+st.dataset.stage);
   });
   document.addEventListener('input', e => { const el = e.target; if (el.dataset && el.dataset.slider) setState(el.dataset.slider, parseFloat(el.value) * parseFloat(el.dataset.scale || 1)); });
+  document.addEventListener('input', e => {
+    const el = e.target; if (!el.dataset || !el.dataset.field) return;
+    const raw = String(el.value).trim(), v = raw === '' ? null : Number(raw);
+    setState(el.dataset.field, v === null || !Number.isFinite(v) ? null : v);
+  });
   document.addEventListener('change', e => { const el = e.target; if (el.dataset && el.dataset.toggle) setState(el.dataset.toggle, el.checked); });
   $('#cam-prev').addEventListener('click', () => setStage(state.stage - 1));
   $('#cam-next').addEventListener('click', () => setStage(state.stage + 1));
@@ -202,7 +226,7 @@ function bindEvents() {
   window.addEventListener('resize', resizeRenderer);
   window.addEventListener('pagehide', disposeAll);
   if (window.ResizeObserver) new ResizeObserver(resizeRenderer).observe($('#viewport'));
-  bindQuiz(); bindAbout();
+  bindQuiz(); bindAbout(); bindGlossary();
 }
 
 /* =====================================================================
@@ -215,7 +239,7 @@ function onLanguageChanged() {
   if (pipeline.umap) pipeline.umap.hospThumbKey = '';
   resetHudSig(); resetBanner();
   renderSidebar(true); updateLegend(); updateHUD(); updateBanner(); syncControls();
-  refreshQuizIfOpen(); refreshAboutIfOpen();
+  refreshQuizIfOpen(); refreshAboutIfOpen(); refreshGlossary();
   dirty.sidebarLive = true; dirty.top3Thumbs = true;
   // El parámetro ?lang= de la URL, si existe, sigue al idioma elegido para que recargar no lo deshaga
   try { const u = new URL(window.location.href); if (u.searchParams.has('lang') && getLang() !== 'pseudo') { u.searchParams.set('lang', getLang()); window.history.replaceState(null, '', u); } } catch (e) { /* sin historial disponible */ }
@@ -245,7 +269,7 @@ async function initApp() {
   /* Proyecta un punto del mundo a píxeles del lienzo (para comprobar solapamientos en las pruebas) */
   const toPixels = v => { const p = v.clone().project(camera), r = renderer.domElement.getBoundingClientRect(); return { x: (p.x + 1) / 2 * r.width, y: (1 - p.y) / 2 * r.height }; };
   const diag = () => ({ geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, objects: countObjects(), toPixels });
-  window.__pdia = { diag, state, dirty, pipeline, MODULES, loaded, setState, setStage, processDirty, setLang: changeLanguage, getLang, t, quizState: () => ({ ...quiz }), ready: true };
+  window.__pdia = { diag, state, gotoModule, dirty, pipeline, MODULES, loaded, setState, setStage, processDirty, setLang: changeLanguage, getLang, t, quizState: () => ({ ...quiz }), ready: true };
 }
 export function boot() {
   const run = () => initApp().catch(showFatal);

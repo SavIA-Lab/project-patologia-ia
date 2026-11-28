@@ -4,7 +4,7 @@
  * portaobjetos sale de i18n y se puede regenerar al cambiar de idioma (rebuildSlideLabelTexture). */
 import { MODALITIES, modName, modStain, modDiagnosis } from './modalities.js';
 import { state } from './state.js';
-import { TEX_W, TEX_H, PYR_LEVELS } from './constants.js';
+import { TEX_W, TEX_H } from './constants.js';
 import { clamp, lerp, smoothstep, hashStr, SeededRandom, hash2, fbm, makeCanvas } from './util.js';
 import { evaluateBiologicalSignals, ARTIFACTS } from './bio.js';
 import { HOSP_PROFILES } from './modalities.js';
@@ -426,21 +426,5 @@ function drawCompositeCrop(ctx, u0, v0, u1, v1, dw, dh) {
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(compCanvas, u0 * TEX_W, v0 * TEX_H, (u1 - u0) * TEX_W, (v1 - v0) * TEX_H, 0, 0, dw, dh);
 }
-const hmScratch = makeCanvas(64, 64);
-/** Dibuja el nivel de la pirámide (0..3 → 5×,10×,20×,40×) centrado en la ROI */
-function drawPyramidLevel(ctx, w, h, level) {
-  const m = MODALITIES[state.modality], roi = m.primaryFocus, f = 1 / PYR_LEVELS[level].zoom;
-  const du = f, dv = f;
-  let u0 = clamp(roi.u - du / 2, 0, 1 - du), v0 = clamp(roi.v - dv / 2, 0, 1 - dv);
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
-  drawCompositeCrop(ctx, u0, v0, u0 + du, v0 + dv, w, h);
-  if (level >= 2) {
-    if (hmScratch.width !== w || hmScratch.height !== h) { hmScratch.width = w; hmScratch.height = h; }
-    const hctx = hmScratch.getContext('2d');
-    drawHighMag40xView(hctx, w, h, state.modality, 1, 7);
-    ctx.globalAlpha = level === 2 ? 0.42 : 1; ctx.drawImage(hmScratch, 0, 0); ctx.globalAlpha = 1;
-  }
-  ctx.restore();
-}
 export { baseCanvas, compCanvas, labelCanvas, drawIrregularNucleus, drawPoly, dot, ell, generateBaseModalityCanvas, drawHighMag40xView,
-  rebuildCompositeTexture, rebuildSlideLabelTexture, lerpProfile, applyColorProfile, drawCompositeCrop, drawPyramidLevel };
+  rebuildCompositeTexture, rebuildSlideLabelTexture, lerpProfile, applyColorProfile, drawCompositeCrop };

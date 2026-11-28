@@ -1,0 +1,1 @@
+export default { id: 'field-map', title: 'module.field-map.title', nav: 'module.field-map.nav', objectives: [], prerequisites: [], minutes: 30, questions: [], references: [], camera: { pos: [0.4, 7.6, 11.8], target: [0.4, 1.8, 0], half: 6.2 } };

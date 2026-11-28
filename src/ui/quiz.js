@@ -3,7 +3,7 @@
  * El progreso no depende del idioma, así que cambiar de idioma con el quiz abierto lo conserva. */
 import { QUIZ_QUESTIONS } from '../modules/registry.js';
 import { $ } from './dom.js';
-import { t } from '../i18n/index.js';
+import { t, has } from '../i18n/index.js';
 
 const freshQuiz = () => ({ i: 0, score: 0, answered: false, sel: -1, done: false });
 export let quiz = freshQuiz();
@@ -33,7 +33,7 @@ export function renderQuiz(keepFocus) {
       <div class="quiz-prog"><div style="width:${(quiz.i + (quiz.answered ? 1 : 0)) / N * 100}%"></div></div>
       <p class="quiz-q">${t(`quiz.${id}.q`)}</p>
       ${[0, 1, 2, 3].map(i => { let c = ''; if (quiz.answered) c = i === Q.correct ? 'ok' : (i === quiz.sel ? 'no' : ''); return `<button type="button" class="quiz-opt ${c}" data-qopt="${i}" ${quiz.answered ? 'disabled' : ''}><span class="lt">${L[i]}</span><span>${t(`quiz.${id}.o.${i}`)}</span></button>`; }).join('')}
-      ${quiz.answered ? `<div class="quiz-fb ${quiz.sel === Q.correct ? 'ok' : 'no'}"><b>${t(quiz.sel === Q.correct ? 'quiz.right' : 'quiz.wrong')}</b> ${t(`quiz.${id}.e`)}</div>` : ''}
+      ${quiz.answered ? `<div class="quiz-fb ${quiz.sel === Q.correct ? 'ok' : 'no'}"><b>${t(quiz.sel === Q.correct ? 'quiz.right' : 'quiz.wrong')}</b> ${t(`quiz.${id}.e`)}</div>${extraHTML(Q, id)}` : ''}
       <div class="quiz-nav"><button type="button" class="btn" data-q="close">${t('quiz.exit')}</button>${quiz.answered ? `<button type="button" class="btn btn-hema" data-q="next">${t(quiz.i === N - 1 ? 'quiz.seeResult' : 'quiz.next')}</button>` : '<span></span>'}</div></div>`;
   }
   const focusedOpt = keepFocus && document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.qopt : undefined;
@@ -41,9 +41,16 @@ export function renderQuiz(keepFocus) {
   const f = (focusedOpt !== undefined && m.querySelector(`[data-qopt="${focusedOpt}"]:not([disabled])`)) || m.querySelector('.btn-hema, .quiz-opt:not([disabled])');
   if (f) f.focus({ preventScroll: true });
 }
+/** Campos opcionales de las preguntas nuevas: ecuación, error frecuente, aplicación práctica y enlace a la sección del módulo */
+function extraHTML(Q, id) {
+  const rows = [['eq', 'quiz.extra.eq'], ['err', 'quiz.extra.err'], ['app', 'quiz.extra.app']].filter(([k]) => has(`quiz.${id}.${k}`)).map(([k, lab]) => `<div><b>${t(lab)}</b> ${t(`quiz.${id}.${k}`)}</div>`);
+  const link = Q.jump ? `<div><button type="button" class="btn btn-sm" data-jump="${Q.jump}" data-anchor="${Q.anchor || ''}">${t('quiz.extra.link')}</button></div>` : '';
+  return rows.length || link ? `<div class="quiz-extra">${rows.join('')}${link}</div>` : '';
+}
 export function bindQuiz() {
   $('#quiz-modal').addEventListener('click', e => {
     if (e.target.id === 'quiz-modal') return closeQuiz();
+    if (e.target.closest('[data-jump]')) { closeQuiz(); return; }
     const o = e.target.closest('[data-qopt]');
     if (o && !quiz.answered) { quiz.sel = +o.dataset.qopt; quiz.answered = true; if (quiz.sel === QUIZ_QUESTIONS[quiz.i].correct) quiz.score++; renderQuiz(); return; }
     const b = e.target.closest('[data-q]'); if (!b) return;

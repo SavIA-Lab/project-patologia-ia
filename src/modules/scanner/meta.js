@@ -1,0 +1,1 @@
+export default { id: 'scanner', title: 'module.scanner.title', nav: 'module.scanner.nav', objectives: [], prerequisites: [], minutes: 30, questions: [], references: [], camera: { pos: [0.4, 7.6, 11.8], target: [0.4, 1.8, 0], half: 6.2 } };
