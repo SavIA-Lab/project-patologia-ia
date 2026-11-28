@@ -1,6 +1,6 @@
 {
   "name": "project-patologia-ia",
-  "version": "2.0.0-a",
+  "version": "2.0.0-b",
   "private": true,
   "description": "Curso interactivo en 3D sobre IA en patología y citología digital · Interactive 3D course on AI in digital pathology and cytology",
   "type": "module",

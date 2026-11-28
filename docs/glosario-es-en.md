@@ -59,3 +59,24 @@ Términos que usa el curso y la forma en que se escriben en cada idioma. La trad
 | reto Humano vs. IA | Human vs. AI challenge | |
 | simulado | simulated | Etiqueta obligatoria en cada módulo |
 | datos sintéticos | synthetic data | |
+| nivel 0 | level 0 | Glosario del curso: `level0` |
+| factor de reducción (downsample) | downsample factor | Glosario del curso: `downsample` |
+| MPP (micras por píxel) | MPP (microns per pixel) | Glosario del curso: `mpp` |
+| aumento nominal | nominal magnification | Glosario del curso: `nominal-magnification` |
+| zoom digital | digital zoom | Glosario del curso: `digital-zoom` |
+| resolución óptica | optical resolution | Glosario del curso: `optical-resolution` |
+| criterio de Nyquist | Nyquist criterion | Glosario del curso: `nyquist` |
+| aliasing (submuestreo) | aliasing | Glosario del curso: `aliasing` |
+| PPI (píxeles por pulgada) | PPI (pixels per inch) | Glosario del curso: `dpi` |
+| campo visual (FOV) | field of view (FOV) | Glosario del curso: `field-of-view` |
+| embedding (vector de características) | embedding (feature vector) | Glosario del curso: `embedding` |
+| escáner de láminas | slide scanner | Glosario del curso: `scanner` |
+| mapa de enfoque | focus map | Glosario del curso: `focus-map` |
+| unión de campos (stitching) | stitching | Glosario del curso: `stitching` |
+| plano Z | Z plane | Glosario del curso: `z-plane` |
+| compresión | compression | Glosario del curso: `compression` |
+| read_region | read_region | Glosario del curso: `read-region` |
+| OME-TIFF | OME-TIFF | Glosario del curso: `ome-tiff` |
+| DICOM WSI | DICOM WSI | Glosario del curso: `dicom-wsi` |
+| remuestreo (resize) | resampling (resize) | Glosario del curso: `resize` |
+| procedencia del dato | data provenance | Glosario del curso: `provenance` |
