@@ -5,9 +5,9 @@ import { MIL_COLS, MIL_ROWS } from './constants.js';
 import { t } from '../i18n/index.js';
 
 export const HOSPITALS = [
-  { key: 'A', hex: '#2F6FBF', color: 0x2F6FBF, center: [-3.3, 0.4, 2.7] },
-  { key: 'B', hex: '#1E293B', color: 0x1E293B, center: [3.1, 2.3, 0.3] },
-  { key: 'C', hex: '#94A3B8', color: 0x94A3B8, center: [0.3, -2.6, -2.9] }
+  { key: 'A', profile: 'high-volume', hex: '#2F6FBF', color: 0x2F6FBF, center: [-3.3, 0.4, 2.7] },
+  { key: 'B', profile: 'benchtop', hex: '#1E293B', color: 0x1E293B, center: [3.1, 2.3, 0.3] },
+  { key: 'C', profile: 'low-cost', hex: '#94A3B8', color: 0x94A3B8, center: [0.3, -2.6, -2.9] }
 ];
 export const hospitalName = h => t(`hospital.${h.key}.name`);
 export const hospitalScanner = h => t(`hospital.${h.key}.scanner`);

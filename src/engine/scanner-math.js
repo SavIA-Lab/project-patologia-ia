@@ -122,12 +122,23 @@ export function salidasEscaneo(perfil, areaMm) {
 }
 
 /** Exportación e importación del perfil a JSON (sin completar en silencio los campos que falten: se vuelve a validar). */
-export const exportarPerfil = perfil => JSON.stringify(crearPerfil(perfil), null, 2);
+export function exportarPerfil(perfil) {
+  const p = crearPerfil(perfil);
+  // Si ya es un perfil completo, se conserva la procedencia que traía (crearPerfil marcaría como "user" todo valor presente)
+  if (perfil && perfil.schema === PERFIL_ESQUEMA) { p.mppSource = perfil.mppSource; p.timingSource = perfil.timingSource; p.compression.ratioSource = perfil.compression.ratioSource; }
+  return JSON.stringify(p, null, 2);
+}
 export function importarPerfil(texto) {
   let obj;
   try { obj = typeof texto === 'string' ? JSON.parse(texto) : texto; } catch (e) { throw err('JSON_INVALIDO', 'perfil', 'El texto no es JSON válido'); }
   if (!obj || typeof obj !== 'object') throw err('CONFIG_INVALIDA', 'perfil', 'El perfil no es un objeto');
   if (obj.schema !== PERFIL_ESQUEMA) throw err('ESQUEMA_INVALIDO', 'schema', 'Esquema desconocido');
   if (obj.version !== PERFIL_VERSION) throw err('VERSION_NO_SOPORTADA', 'version', 'Versión no soportada');
-  return crearPerfil({ ...obj, mpp: obj.mpp });
+  const p = crearPerfil({ ...obj, mpp: obj.mpp });
+  // La procedencia de cada parámetro viaja con el perfil: lo que era ilustrativo sigue marcado como ilustrativo
+  const fuente = v => (v === 'user' || v === 'illustrative-default' ? v : null);
+  p.mppSource = fuente(obj.mppSource) ?? 'user';
+  p.timingSource = fuente(obj.timingSource) ?? 'user';
+  p.compression.ratioSource = fuente(obj.compression?.ratioSource) ?? 'user';
+  return p;
 }

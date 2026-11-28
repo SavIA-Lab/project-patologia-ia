@@ -9,7 +9,7 @@ const run = (label, cmd, args) => {
   const r = spawnSync(cmd, args, { cwd: ROOT, stdio: 'inherit', shell: process.platform === 'win32' });
   if (r.status !== 0) { console.error(`\n✖ Falló: ${label}`); process.exit(r.status || 1); }
 };
-run('Pruebas unitarias', process.execPath, ['--test', 'tests/unit/i18n.test.mjs', 'tests/unit/vocabulary.test.mjs', 'tests/unit/engine.test.mjs']);
+run('Pruebas unitarias', process.execPath, ['--test', 'tests/unit/i18n.test.mjs', 'tests/unit/vocabulary.test.mjs', 'tests/unit/engine.test.mjs', 'tests/unit/patch-math.test.mjs', 'tests/unit/scanner-math.test.mjs']);
 run('Compilación (npm run build)', process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build']);
 run('Pruebas de navegador', process.execPath, ['--test', '--test-concurrency=1', '--test-timeout=900000', 'tests/browser.test.mjs']);
 console.log('\n✔ Todas las pruebas pasaron');
