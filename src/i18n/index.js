@@ -52,7 +52,7 @@ function autoNf() { if (!autoCache[lang]) autoCache[lang] = new Intl.NumberForma
 export const fmt = {
   /** Número con `digits` decimales fijos; sin separador de miles salvo que se pida. */
   num: (v, digits = 0, grouping = false) => nf(digits, grouping).format(v),
-  /** Fracción 0–1 como porcentaje, sin espacio antes del signo (como en la v3.0). */
+  /** Fracción 0-1 como porcentaje, sin espacio antes del signo (como en la v3.0). */
   pct: (v, digits = 0) => nf(digits, false).format(v * 100) + '%',
   int: v => nf(0, true).format(v),
   /** Número tal como viene (sin decimales de relleno): 2 → "2", 0.5 → "0.5" */

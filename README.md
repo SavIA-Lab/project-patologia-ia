@@ -1,12 +1,12 @@
 # PatologIA 3D
 
-**Patología Digital & IA - Laboratorio Interactivo 3D** · *Digital Pathology & AI — Interactive 3D Lab*
+**Patología Digital & IA - Laboratorio Interactivo 3D** · *Digital Pathology & AI - Interactive 3D Lab*
 
 Curso interactivo y abierto sobre IA en patología y citología digital, para quienes empiezan. Todo es sintético y cada módulo lleva la etiqueta «simulado». / Open interactive course on AI in digital pathology and cytology, for beginners. Everything is synthetic and every module carries the "simulated" label.
 
 **Sitio / Site:** <https://savia-lab.github.io/project-patologia-ia/> (`?lang=es` · `?lang=en`)
 
-> © 2026 Andrés Felipe Cardona-Mendoza, SavIA Lab–INMUBO, Universidad El Bosque. Todos los derechos reservados. Uso libre del sitio publicado para aprender y enseñar; no se permite copiar, modificar ni redistribuir el código ni los contenidos sin autorización escrita.
+> © 2026 Andrés Felipe Cardona-Mendoza, SavIA Lab-INMUBO, Universidad El Bosque. Todos los derechos reservados. Uso libre del sitio publicado para aprender y enseñar; no se permite copiar, modificar ni redistribuir el código ni los contenidos sin autorización escrita.
 >
 > All rights reserved. The published site is free to use for learning and teaching; copying, modifying or redistributing the code or content is not permitted without written authorization.
 
@@ -73,7 +73,7 @@ Ver [CITATION.cff](CITATION.cff).
 
 ### Autoría y herramientas
 
-Autor y director: Andrés Felipe Cardona-Mendoza, SavIA Lab–INMUBO, Universidad El Bosque. Desarrollado con Claude Sonnet 5.5 (Anthropic), bajo la dirección del autor. Las dependencias de terceros y sus licencias están en [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Autor y director: Andrés Felipe Cardona-Mendoza, SavIA Lab-INMUBO, Universidad El Bosque. Desarrollado con Claude Sonnet 5.5 (Anthropic), bajo la dirección del autor. Las dependencias de terceros y sus licencias están en [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ---
 
@@ -126,4 +126,4 @@ See [CITATION.cff](CITATION.cff).
 
 ### Authorship and tools
 
-Author and director: Andrés Felipe Cardona-Mendoza, SavIA Lab–INMUBO, Universidad El Bosque. Developed using Claude Sonnet 5.5 (Anthropic), under the author's direction. Third-party dependencies and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Author and director: Andrés Felipe Cardona-Mendoza, SavIA Lab-INMUBO, Universidad El Bosque. Developed using Claude Sonnet 5.5 (Anthropic), under the author's direction. Third-party dependencies and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

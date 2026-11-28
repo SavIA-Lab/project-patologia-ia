@@ -215,7 +215,7 @@ test('pantalla "Acerca de": autoría, herramienta, etiqueta simulado y qué es r
     const { page, log } = await openPage(browser, srv.url, { lang });
     await page.click('#btn-about'); await settle(page, 100);
     const text = await visibleText(page, '#about-modal');
-    for (const must of ['Andrés Felipe Cardona-Mendoza', 'SavIA Lab–INMUBO', 'Universidad El Bosque', 'Claude Sonnet 5.5', '© 2026']) assert.ok(text.includes(must), `${lang}: falta "${must}"`);
+    for (const must of ['Andrés Felipe Cardona-Mendoza', 'SavIA Lab-INMUBO', 'Universidad El Bosque', 'Claude Sonnet 5.5', '© 2026']) assert.ok(text.includes(must), `${lang}: falta "${must}"`);
     assert.ok(/simulad|simulated/i.test(text));
     assert.ok(await page.$('#about-modal .logo-slot'), 'falta el espacio del logo de SavIA');
     assert.ok(await page.$eval('#about-modal .about-card', el => el.querySelectorAll('img').length === 0), 'no debe haber logos de universidades');

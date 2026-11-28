@@ -1,5 +1,5 @@
 /* Elementos de interfaz que rodean al visor 3D: textos fijos traducidos, navegación, panel lateral, leyenda,
- * trazabilidad del parche y banner del reto. Migrado de la v3.0 (p5_ui.js §14–16) con los textos en src/i18n. */
+ * trazabilidad del parche y banner del reto. Migrado de la v3.0 (p5_ui.js §14-16) con los textos en src/i18n. */
 import { state, dirty, getPath, hooks } from '../engine/state.js';
 import { MODALITIES, modName, modDiagnosis } from '../engine/modalities.js';
 import { tileTypeLabel } from '../engine/bio.js';

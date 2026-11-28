@@ -15,7 +15,7 @@ h2{font-size:40px;line-height:1.15;font-weight:500;color:#475569;margin-top:28px
 .tag{border:2px solid #FDE68A;background:#FFFBEB;color:#92400E;border-radius:99px;padding:6px 20px;font:700 22px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
 .dots{display:flex;gap:10px}.dots i{width:22px;height:22px;border-radius:50%;display:block}
 </style><div class="band"></div><div class="wrap"><div class="kicker">PatologIA 3D</div>
-<h1>Patología Digital &amp; IA<br>Laboratorio Interactivo 3D</h1><h2>Digital Pathology &amp; AI — Interactive 3D Lab</h2></div>
+<h1>Patología Digital &amp; IA<br>Laboratorio Interactivo 3D</h1><h2>Digital Pathology &amp; AI - Interactive 3D Lab</h2></div>
 <div class="row"><div class="dots"><i style="background:#4C3A7A"></i><i style="background:#C95B82"></i><i style="background:#0F766E"></i><i style="background:#D97706"></i><i style="background:#BE123C"></i></div>
 <div>savia-lab.github.io/project-patologia-ia</div><div class="tag">simulado · simulated</div></div>`;
 const b = await launch(), p = await b.newPage();

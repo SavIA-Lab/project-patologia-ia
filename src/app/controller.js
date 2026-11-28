@@ -1,5 +1,5 @@
 /* Controlador de la aplicación: estado compartido, cambio de modalidad y de módulo, bucle de recálculo y de dibujo,
- * eventos del visor y cambio de idioma en caliente. Migrado de la v3.0 (p5_ui.js §18–21).
+ * eventos del visor y cambio de idioma en caliente. Migrado de la v3.0 (p5_ui.js §18-21).
  * Cambios respecto de la v3.0: los módulos se cargan bajo demanda; los datos del pipeline (teselas, bolsa MIL, nube UMAP,
  * mapa de calor) se calculan aquí aunque el módulo no esté cargado; el cambio de idioma regenera todo el texto sin tocar el estado. */
 import {

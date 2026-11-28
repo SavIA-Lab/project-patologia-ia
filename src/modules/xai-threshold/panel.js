@@ -1,4 +1,4 @@
-/* Etapa 5 · panel lateral, banner del reto y métricas en vivo. Migrado de la v3.0 (p5_ui.js §15–16: sidebarStage5, updateSidebarLive, updateBanner). */
+/* Etapa 5 · panel lateral, banner del reto y métricas en vivo. Migrado de la v3.0 (p5_ui.js §15-16: sidebarStage5, updateSidebarLive, updateBanner). */
 import { state, pipeline } from '../../engine/state.js';
 import { MODALITIES, top3Morphology } from '../../engine/modalities.js';
 import { rampCss } from '../../engine/pipeline.js';
@@ -14,7 +14,7 @@ export function panelHTML() {
   const M = MODALITIES[state.modality], ch = state.challenge;
   const top3 = M.top3.map((tp, i) => `<button type="button" class="top3-card" data-action="top3" data-i="${i}">
       <canvas id="t3c-${i}" width="152" height="152"></canvas>
-      <div class="t3-i"><div class="t3-h">${t('s5.top3.head', { rank: tp.rank, coords: tp.coords })}</div><div class="t3-r">a<sub>k</sub> = <span id="t3a-${i}">—</span> · x ${fmt.pct(tp.u, 1)} · y ${fmt.pct(tp.v, 1)}</div><div style="margin-top:3px;color:var(--ink2)">${top3Morphology(M, i)}</div></div></button>`).join('');
+      <div class="t3-i"><div class="t3-h">${t('s5.top3.head', { rank: tp.rank, coords: tp.coords })}</div><div class="t3-r">a<sub>k</sub> = <span id="t3a-${i}">-</span> · x ${fmt.pct(tp.u, 1)} · y ${fmt.pct(tp.v, 1)}</div><div style="margin-top:3px;color:var(--ink2)">${top3Morphology(M, i)}</div></div></button>`).join('');
   let challengeHTML;
   if (!ch.active) challengeHTML = `<p style="font-size:12.5px;color:var(--ink2);margin:0 0 8px">${t('s5.ch.intro')}</p><button type="button" class="btn btn-hema" data-action="challenge-start">${t('s5.ch.start')}</button>`;
   else if (!ch.revealed) challengeHTML = `<div class="note warn">${t('s5.ch.pins', { n: ch.pins.length })}</div>
@@ -46,15 +46,15 @@ export function panelHTML() {
       <div class="metric-grid" style="margin-top:10px">${metric('roc-sens', t('s5.m.sens'), t('s5.m.sensSub'), 'good')}${metric('roc-spec', t('s5.m.spec'), t('s5.m.specSub'), 'good')}${metric('roc-ppv', t('s5.m.ppv'), t('s5.m.ppvSub'))}${metric('roc-npv', t('s5.m.npv'), t('s5.m.npvSub'))}</div>
       <div style="font-size:11.5px;color:var(--ink2);margin:10px 0 2px">${t('s5.cohort', { n: fmt.int(COHORT.n), prev: fmt.pct(COHORT.prev, 0), pos: fmt.int(P), neg: fmt.int(COHORT.n - P) })}</div>
       <div class="cm"><div class="h"></div><div class="h">${t('s5.cm.actualPos')}</div><div class="h">${t('s5.cm.actualNeg')}</div>
-        <div class="h">${t('s5.cm.predPos')}</div><div class="tp" id="cm-tp">—</div><div class="fp" id="cm-fp">—</div>
-        <div class="h">${t('s5.cm.predNeg')}</div><div class="fn" id="cm-fn">—</div><div class="tn" id="cm-tn">—</div></div>
+        <div class="h">${t('s5.cm.predPos')}</div><div class="tp" id="cm-tp">-</div><div class="fp" id="cm-fp">-</div>
+        <div class="h">${t('s5.cm.predNeg')}</div><div class="fn" id="cm-fn">-</div><div class="tn" id="cm-tn">-</div></div>
       <div class="note" id="s5-note"></div>
     </div>`;
 }
 
 export function panelLive() {
   const M = MODALITIES[state.modality], S = pipeline.mil;
-  M.top3.forEach((tp, i) => { setText('t3a-' + i, S ? fmt.pct(S.w.att[tp.bagIndex], 1) : '—'); });
+  M.top3.forEach((tp, i) => { setText('t3a-' + i, S ? fmt.pct(S.w.att[tp.bagIndex], 1) : '-'); });
   $$('.top3-card').forEach(c => c.classList.toggle('sel', +c.dataset.i === state.selectedTop3));
   const ramp = $('#s5-ramp'); if (ramp) ramp.style.background = rampCss(state.heatScale);
   const r = rocAt(state.tau);

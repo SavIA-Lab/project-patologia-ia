@@ -59,7 +59,7 @@ function distSeg(px, py, ax, ay, bx, by) {
   const t = clamp(((px - ax) * abx + (py - ay) * aby) / (abx * abx + aby * aby));
   return Math.hypot(ax + t * abx - px, ay + t * aby - py);
 }
-/** Evalúa la intensidad (0–1) de cada artefacto activo en (u,v). Las distancias se calculan en unidades isotrópicas (u·2, v). */
+/** Evalúa la intensidad (0-1) de cada artefacto activo en (u,v). Las distancias se calculan en unidades isotrópicas (u·2, v). */
 function evaluateArtifactAt(u, v, active) {
   const out = { blur: 0, folds: 0, ink: 0, bubbles: 0 };
   if (active.blur) {

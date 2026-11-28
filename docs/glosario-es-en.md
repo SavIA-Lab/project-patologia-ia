@@ -1,4 +1,4 @@
-# Glosario ES–EN
+# Glosario ES-EN
 
 Términos que usa el curso y la forma en que se escriben en cada idioma. La traducción al inglés es un borrador pendiente de revisión; este glosario fija el criterio para revisarla. Los términos marcados con * se dejan en inglés también en el texto en español, porque así los usa la literatura y el software.
 
