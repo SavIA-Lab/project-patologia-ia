@@ -9,7 +9,8 @@ export const state = {
   track: 'all',                                  // filtro de la navegación por nivel de ruta (M0)
   /* Perfil de escáner genérico: dato compartido que define M1 y que usarán M2 y, desde la v2.1b, M5. Estructura en docs/perfil-escaner-generico.md */
   scannerProfile: crearPerfil({ family: 'high-volume', objective: 40 }),
-  m1: { family: 'high-volume', objective: 40, scanMode: 'area', zPlanes: 1, zStepUm: 1, focusPoints: 25, compression: 'none', mppEdited: false, progress: 1, seams: false, banding: false, strips: false, cast: false },
+  m0: { pred: -1 },
+  m1: { area: { w: 15, h: 15 }, pred: -1, family: 'high-volume', objective: 40, scanMode: 'area', zPlanes: 1, zStepUm: 1, focusPoints: 25, compression: 'none', mppEdited: false, progress: 0.35, seams: false, banding: false, strips: false, cast: false },
   m2: {
     mppSource: 'scanner', mpp: { x: 0.25, y: 0.25 }, objective: 40,
     nuc: { diam: 9, cell: 22, mpp: 0.5, zoom: 2, chrom: 0.5, irreg: 0.3, seed: 7, view: 'resampled' },
