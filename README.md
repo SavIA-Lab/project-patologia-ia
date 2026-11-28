@@ -1,6 +1,6 @@
 # PatologIA 3D
 
-**Patología Digital & IA — Laboratorio Interactivo 3D** · *Digital Pathology & AI — Interactive 3D Lab*
+**Patología Digital & IA - Laboratorio Interactivo 3D** · *Digital Pathology & AI — Interactive 3D Lab*
 
 Curso interactivo y abierto sobre IA en patología y citología digital, para quienes empiezan. Todo es sintético y cada módulo lleva la etiqueta «simulado». / Open interactive course on AI in digital pathology and cytology, for beginners. Everything is synthetic and every module carries the "simulated" label.
 
