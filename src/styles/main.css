@@ -285,6 +285,10 @@ input[type=range]{width:100%;accent-color:var(--teal);margin:2px 0}
 .stage-btn.off.active{opacity:1}
 #work2d{position:absolute;inset:0;overflow:auto;padding:14px 16px 64px;background:var(--vp);z-index:2}
 #work2d[hidden]{display:none}
+/* En los módulos 2D la barra de navegación ocupa una franja propia bajo el área de trabajo y no tapa contenido */
+#viewport.is-2d #work2d{bottom:62px;padding-bottom:14px}
+#viewport.is-2d #cam-controls{z-index:3}
+#cam-controls .btn[hidden]{display:none}
 .w2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;align-items:start}
 .w2-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px;min-width:0}
 .w2-grid>.w2-card{margin-bottom:0}
@@ -350,7 +354,7 @@ details.sec-d li{margin:3px 0}
 .mp-lvl{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;font-size:11.5px}
 .mp-lvl .bar{height:16px;border-radius:3px;background:var(--hema);opacity:.85;min-width:3px}
 .mp-lvl .bar.sel{background:var(--teal);opacity:1}
-@media (max-width:980px){#work2d{padding:12px 10px 64px}.w2-grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:980px){#work2d{padding:12px 10px 64px}#viewport.is-2d #work2d{padding-bottom:12px}.w2-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* M0, M1, M2: ajustes de las secciones comunes (objetivos, predicción, referencias, campos de la pirámide) */
 .w2-wide{grid-column:1/-1}

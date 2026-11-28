@@ -294,6 +294,52 @@ for (const [width, height] of [[1440, 900], [768, 1024]]) {
   });
 }
 
+/* La barra "Anterior / Centrar cámara / Siguiente" flota sobre el visor: en los módulos 2D no debe tapar ningún bloque del espacio de trabajo,
+   ni al inicio ni al final del desplazamiento, y "Centrar cámara" solo existe donde hay escena 3D. */
+for (const [width, height] of [[1440, 900], [768, 1024]]) {
+  test(`la barra de navegación no tapa contenido en M0, M1 y M2 a ${width} px (ES y EN, 3 modalidades, inicio y final)`, async () => {
+    for (const lang of ['es', 'en']) {
+      const { page, log } = await openPage(browser, srv.url, { width, height, lang });
+      for (const modality of MODS) {
+        await setState(page, 'modality', modality);
+        for (const n of TWO_D) {
+          await goStage(page, n); await settle(page, 200);
+          for (const pos of ['inicio', 'final']) {
+            const r = await page.evaluate(async (atEnd) => {
+              const w = document.querySelector('#work2d'); w.scrollTop = atEnd ? w.scrollHeight : 0;
+              await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+              const bar = document.querySelector('#cam-controls'), b = bar.getBoundingClientRect(), wr = w.getBoundingClientRect(), bad = [];
+              const hit = (a, c) => a.left < c.right - 0.5 && a.right > c.left + 0.5 && a.top < c.bottom - 0.5 && a.bottom > c.top + 0.5;
+              if (hit(b, wr)) bad.push(`la barra invade el área de trabajo (${Math.round(b.top)} < ${Math.round(wr.bottom)})`);
+              w.querySelectorAll('*').forEach(e => {
+                const q = e.getBoundingClientRect(); if (!q.width || !q.height) return;
+                const vis = { left: Math.max(q.left, wr.left), right: Math.min(q.right, wr.right), top: Math.max(q.top, wr.top), bottom: Math.min(q.bottom, wr.bottom) };
+                if (vis.right > vis.left && vis.bottom > vis.top && hit(vis, b)) bad.push(`${e.tagName.toLowerCase()}.${String(e.className).split(' ')[0]}`);
+              });
+              // el último bloque de contenido llega a verse completo por encima de la barra al final del desplazamiento
+              if (atEnd) {
+                const cards = [...w.querySelectorAll('.w2-card')].filter(c => c.getBoundingClientRect().height), last = cards[cards.length - 1];
+                if (last && last.getBoundingClientRect().bottom > b.top + 0.5) bad.push('el último bloque queda bajo la barra');
+              }
+              const bb = bar.getBoundingClientRect(), vp = document.querySelector('#viewport').getBoundingClientRect();
+              if (bb.bottom > vp.bottom + 0.5 || bb.left < vp.left - 0.5 || bb.right > vp.right + 0.5) bad.push('la barra se sale del visor');
+              const c = document.querySelector('#cam-center'), cs = getComputedStyle(c);
+              if (cs.display !== 'none' || c.getBoundingClientRect().width) bad.push('"Centrar cámara" visible sin escena 3D');
+              return bad.slice(0, 5);
+            }, pos === 'final');
+            assert.deepEqual(r, [], `${width}px ${lang}/${modality}/módulo ${n}/${pos}`);
+          }
+        }
+      }
+      // con escena 3D el botón sigue disponible
+      await goStage(page, 5);
+      const c3 = await page.$eval('#cam-center', e => { const q = e.getBoundingClientRect(); return getComputedStyle(e).display !== 'none' && q.width > 0 && !e.disabled; });
+      assert.ok(c3, `${width}px ${lang}: "Centrar cámara" debe verse en un módulo 3D`);
+      noErrors(log, `barra de navegación ${width} ${lang}`); await page.close();
+    }
+  });
+}
+
 test('a 768 px el panel lateral se apila debajo del visor; a 1440 px va a su lado', async () => {
   const pos = async (w, h) => {
     const { page } = await openPage(browser, srv.url, { width: w, height: h, lang: 'es' });
